@@ -18,20 +18,20 @@ import java.util.Date;
 @Repository
 public class ProductDao {
 
-    public List<Product> getAllProducts(){
-        Connection con = getConnection();
+    public List<Product> getAllProducts() {
+        Connection con = SqlServerConnector.getConnection();
         List<Product> products = new ArrayList<Product>() {
         };
-        if(con == null){
+        if (con == null) {
             return null;
-        }else {
+        } else {
             Statement state;
             String query = "Select * from Products";
-            try{
+            try {
                 state = con.createStatement();
                 ResultSet rs = state.executeQuery(query);
 
-                while(rs.next()){
+                while (rs.next()) {
                     Product newProduct = new Product(
                             rs.getString("product_name"),
                             rs.getString("product_description"),
@@ -42,9 +42,9 @@ public class ProductDao {
                     newProduct.setId(rs.getInt("id"));
                     products.add(newProduct);
                 }
-            }catch (SQLException ex){
+            } catch (SQLException ex) {
                 return null;
-            } catch (Exception e){
+            } catch (Exception e) {
                 return null;
             }
             return products;
@@ -52,54 +52,54 @@ public class ProductDao {
     }
 
     public Product getProductById(int id) {
-        Connection con = getConnection();
+        Connection con = SqlServerConnector.getConnection();
         if (con == null) {
             return null;
         } else {
-             return getProductBy_Id(id);
+            return getProductBy_Id(id);
         }
     }
 
     public boolean createProduct(Product product) {
         Product productToCheck;
         productToCheck = getProductByName(product.getProductName());
-        if(productToCheck != null){
+        if (productToCheck != null) {
             return false;
-        }else{
-            String query = "INSERT INTO products VALUES ('"+product.getProductName()+"','"+
-                    product.getDescription()+"',"+
-                    product.getQuantityStoraged()+","+
-                    product.getPurchasePrice()+","+
-                    product.getSalePrice()+")";
+        } else {
+            String query = "INSERT INTO products VALUES ('" + product.getProductName() + "','"
+                    + product.getDescription() + "',"
+                    + product.getQuantityStoraged() + ","
+                    + product.getPurchasePrice() + ","
+                    + product.getSalePrice() + ")";
             return executeUpdate(query);
 
         }
 
     }
 
-    public boolean updateProduct(Product product){
+    public boolean updateProduct(Product product) {
         Product productToCheck;
         productToCheck = getProductById(product.getId());
-        if(product != productToCheck){
-            String query = "UPDATE products SET product_name = '"+product.getProductName()+
-                    "', product_description = '"+ product.getDescription()+
-                    "', quantity_storaged ="+ product.getQuantityStoraged()+
-                    ", purchase_price= "+ product.getPurchasePrice()+
-                    ", sale_price="+product.getSalePrice()+" WHERE id ="+ product.getId();
+        if (product != productToCheck) {
+            String query = "UPDATE products SET product_name = '" + product.getProductName()
+                    + "', product_description = '" + product.getDescription()
+                    + "', quantity_storaged =" + product.getQuantityStoraged()
+                    + ", purchase_price= " + product.getPurchasePrice()
+                    + ", sale_price=" + product.getSalePrice() + " WHERE id =" + product.getId();
             return executeUpdate(query);
-        }else {
+        } else {
             return true;
         }
     }
 
-    private boolean executeUpdate(String query){
+    private boolean executeUpdate(String query) {
         try {
-            Connection con = getConnection();
+            Connection con = SqlServerConnector.getConnection();
             Statement state;
             state = con.createStatement();
             int result = state.executeUpdate(query);
 
-            if(result ==1){
+            if (result == 1) {
                 return true;
             }
             return false;
@@ -110,7 +110,7 @@ public class ProductDao {
         }
     }
 
-    public TransferResponse entryProducts(int id, long entry){
+    public TransferResponse entryProducts(int id, long entry) {
         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
         int year = Calendar.YEAR;
         int month = Calendar.MONTH;
@@ -121,44 +121,43 @@ public class ProductDao {
         cal.set(Calendar.DAY_OF_MONTH, day);
         java.sql.Date date = new java.sql.Date(cal.getTimeInMillis());
 
-        Connection con = getConnection();
+        Connection con = SqlServerConnector.getConnection();
         Product product = getProductById(id);
         product.setQuantityStoraged(product.getQuantityStoraged() + entry);
         int resultUpdate, resultTransfer;
         Statement state;
-        String query = "UPDATE products SET quantity_storaged = "+ product.getQuantityStoraged() + " WHERE id ="+ id;
+        String query = "UPDATE products SET quantity_storaged = " + product.getQuantityStoraged() + " WHERE id =" + id;
         try {
             state = con.createStatement();
             resultUpdate = state.executeUpdate(query);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             return null;
         }
-        if(resultUpdate == 1) {
+        if (resultUpdate == 1) {
             Transfer transfer = new Transfer(product.getId(), Date.from(Instant.now()), TransferType.EntryTransfer,
                     entry, product.getPurchasePrice());
-            String queryTransfer= "INSERT INTO TRANSFERS ([product_id]" +
-                    "           ,[transfer_type]" +
-                    "           ,[quantity]" +
-                    "           ,[unit_cost]) VALUES("+ transfer.ProductId+
-            ","+ transfer.TransferType.ordinal()+","+
-                    transfer.Quantity+"," +  transfer.UnitCost+")";
-            try{
+            String queryTransfer = "INSERT INTO TRANSFERS ([product_id]"
+                    + "           ,[transfer_type]"
+                    + "           ,[quantity]"
+                    + "           ,[unit_cost]) VALUES(" + transfer.ProductId
+                    + "," + transfer.TransferType.ordinal() + ","
+                    + transfer.Quantity + "," + transfer.UnitCost + ")";
+            try {
                 resultTransfer = state.executeUpdate(queryTransfer);
-            }catch (SQLException e){
+            } catch (SQLException e) {
                 return null;
             }
             if (resultTransfer == 1) {
                 return new TransferResponse(transfer);
-            }
-            else{
+            } else {
                 return null;
             }
-        }else{
+        } else {
             return null;
         }
     }
 
-    public TransferResponse outProducts(int id, long out){
+    public TransferResponse outProducts(int id, long out) {
         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
         int year = Calendar.YEAR;
         int month = Calendar.MONTH;
@@ -169,43 +168,42 @@ public class ProductDao {
         cal.set(Calendar.DAY_OF_MONTH, day);
         java.sql.Date date = new java.sql.Date(cal.getTimeInMillis());
 
-        Connection con = getConnection();
+        Connection con = SqlServerConnector.getConnection();
         Product product = getProductById(id);
         product.setQuantityStoraged(product.getQuantityStoraged() - out);
         long quantity = product.getQuantityStoraged();
-        if(quantity - out <=0){
+        if (quantity - out <= 0) {
             return new TransferResponse("QuantitySoldOut");
         }
         int resultUpdate, resultTransfer;
         Statement state;
-        String query = "UPDATE products SET quantity_storaged = "+ product.getQuantityStoraged() + " WHERE id ="+ id;
+        String query = "UPDATE products SET quantity_storaged = " + product.getQuantityStoraged() + " WHERE id =" + id;
         try {
             state = con.createStatement();
             resultUpdate = state.executeUpdate(query);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             return null;
         }
-        if(resultUpdate == 1) {
+        if (resultUpdate == 1) {
             Transfer transfer = new Transfer(product.getId(), Date.from(Instant.now()), TransferType.OutTransfer,
                     out, product.getSalePrice());
-            String queryTransfer= "INSERT INTO TRANSFERS ([product_id]" +
-                    "           ,[transfer_type]" +
-                    "           ,[quantity]" +
-                    "           ,[unit_cost]) VALUES("+ transfer.ProductId+
-                    ","+ transfer.TransferType.ordinal() +","+
-                    transfer.Quantity+"," +  transfer.UnitCost+")";
-            try{
+            String queryTransfer = "INSERT INTO TRANSFERS ([product_id]"
+                    + "           ,[transfer_type]"
+                    + "           ,[quantity]"
+                    + "           ,[unit_cost]) VALUES(" + transfer.ProductId
+                    + "," + transfer.TransferType.ordinal() + ","
+                    + transfer.Quantity + "," + transfer.UnitCost + ")";
+            try {
                 resultTransfer = state.executeUpdate(queryTransfer);
-            }catch (SQLException e){
+            } catch (SQLException e) {
                 return null;
             }
             if (resultTransfer == 1) {
                 return new TransferResponse(transfer);
-            }
-            else{
+            } else {
                 return null;
             }
-        }else{
+        } else {
             return null;
         }
     }
@@ -214,47 +212,35 @@ public class ProductDao {
         String ruta = "reporte.txt";
         File archivo = new File(ruta);
         BufferedWriter bw;
-        try{
-        if(archivo.exists()) {
-            bw = new BufferedWriter(new FileWriter(archivo));
-            bw.write("El fichero de texto ya estaba creado.");
-        } else {
-            bw = new BufferedWriter(new FileWriter(archivo));
-            bw.write("Acabo de crear el fichero de texto.");
-        }
+        try {
+            if (archivo.exists()) {
+                bw = new BufferedWriter(new FileWriter(archivo));
+                bw.write("El fichero de texto ya estaba creado.");
+            } else {
+                bw = new BufferedWriter(new FileWriter(archivo));
+                bw.write("Acabo de crear el fichero de texto.");
+            }
             bw.close();
             return "La accion fue un exito";
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return "Hubo un problema al ejecutar la accion" + ex.getMessage();
         }
     }
 
-    private Connection getConnection() {
-        try{
-            String connectionUrl = "jdbc:sqlserver://localhost:1433;database=ProductManager;integratedSecurity=true;";
-            Connection cnn = DriverManager.getConnection(connectionUrl,
-                    "sa","123456");
-            return cnn;
-        }catch (SQLException ex){
-            return null;
-        }
-
-    }
-
-    private Product getProductBy_Id(int id){
-        String query = "Select * from products WHERE id ="+ id;
+    private Product getProductBy_Id(int id) {
+        String query = "Select * from products WHERE id =" + id;
         return getProduct(query);
     }
 
-    private Product getProductByName(String name){
-        String query = "Select * from products WHERE product_name ="+ name;
+    private Product getProductByName(String name) {
+        String query = "Select * from products WHERE product_name =" + name;
         return getProduct(query);
     }
 
-    private Product getProduct(String query){
+    private Product getProduct(String query) {
         try {
             Product product = new Product();
-            Connection con = getConnection();
+            Connection con = SqlServerConnector.getConnection();
             Statement state;
             state = con.createStatement();
             ResultSet rs = state.executeQuery(query);
@@ -277,7 +263,5 @@ public class ProductDao {
             return null;
         }
     }
-
-
 
 }

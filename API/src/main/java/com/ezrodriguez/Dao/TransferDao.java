@@ -11,8 +11,8 @@ import java.util.List;
 @Repository
 public class TransferDao {
 
-    public Transfer getTransferById(int id){
-        Connection con = getConnection();
+    public Transfer getTransferById(int id) {
+        Connection con = SqlServerConnector.getConnection();
         if (con == null) {
             return null;
         } else {
@@ -20,37 +20,25 @@ public class TransferDao {
         }
     }
 
-    private Transfer getTransferBy_Id(int id){
-        String query = "Select * from transfers WHERE id ="+ id;
+    private Transfer getTransferBy_Id(int id) {
+        String query = "Select * from transfers WHERE id =" + id;
         return getTransfer(query);
     }
 
-    private Connection getConnection() {
-        try{
-            String connectionUrl = "jdbc:sqlserver://localhost:1433;database=ProductManager;integratedSecurity=true;";
-            Connection cnn = DriverManager.getConnection(connectionUrl,
-                    "sa","123456");
-            return cnn;
-        }catch (SQLException ex){
-            return null;
-        }
-
-    }
-
-    private Transfer getTransfer(String query){
+    private Transfer getTransfer(String query) {
         try {
             Transfer transfer = new Transfer();
-            Connection con = getConnection();
+            Connection con = SqlServerConnector.getConnection();
             Statement state;
             state = con.createStatement();
             ResultSet rs = state.executeQuery(query);
 
             while (rs.next()) {
                 String type;
-                if(rs.getInt("transfer_type") == 1){
+                if (rs.getInt("transfer_type") == 1) {
                     type = "EntryTransfer";
-                }else{
-                    type ="OutTransfer";
+                } else {
+                    type = "OutTransfer";
                 }
                 Transfer newTransfer = new Transfer(
                         rs.getInt("product_id"),
@@ -71,7 +59,7 @@ public class TransferDao {
     }
 
     public List<Transfer> getAllTransfers() {
-        Connection con = getConnection();
+        Connection con = SqlServerConnector.getConnection();
         List<Transfer> transfers = new ArrayList<Transfer>() {
         };
         if (con == null) {
