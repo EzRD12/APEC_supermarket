@@ -10,15 +10,23 @@ import { Product } from '../../models/Product';
 })
 export class IndexComponent implements OnInit {
 
-  products: Array<Product>;
+  products: Product[] = [];
+  displayData: Product[] = [];
+
   constructor( private productService: ProductService) {
     productService.getAllProducts().then(data => {
-      this.products = data;
+      this.products = [...data];
+      this.displayData = [...this.products];
     });
    }
 
   ngOnInit() {
   }
-
+  onSearch(searchText: string) {
+    this.displayData = this.products.filter((products) => {
+      return Object.keys(products).some(keys => products[keys] != null &&
+        products[keys].toString().toLowerCase()
+          .includes(searchText.toLowerCase()));
+    });
 }
-
+}

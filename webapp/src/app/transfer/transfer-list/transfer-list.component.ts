@@ -9,15 +9,23 @@ import { Transfer } from '../../models/Transfer';
 })
 export class TransferListComponent implements OnInit {
 
-  transfers: Array<Transfer>;
+  transfers: Transfer[] = [];
+  displayData: Transfer[] = [];
   constructor(private transferService: TransferService) {
     transferService.getAllTransfers().then(resp => {
       console.log(resp);
       this.transfers = resp;
+      this.displayData = [...this.transfers];
     });
   }
 
   ngOnInit() {
   }
-
+  onSearch(searchText: string) {
+    this.displayData = this.transfers.filter((transfer) => {
+      return Object.keys(transfer).some(keys => transfer[keys] != null &&
+        transfer[keys].toString().toLowerCase()
+          .includes(searchText.toLowerCase()));
+    });
+}
 }

@@ -9,9 +9,15 @@
             <div class="col-sm-12">
                 <div class="contact-form">
                     <h2 class="headers text-center">Listado de productos</h2>
-                    <a style="float:right;" class="btn btn-default" [routerLink]="['/createProduct']">
+                    <a style="float:left;" class="btn btn-default" [routerLink]="['/createProduct']">
                         <span class="ti-plus"></span> Agregar producto
                     </a>
+
+                    <form >
+                      <input style="height: 40px;float: right" class="btn" value="Buscar" type="submit">
+                      <input style="width: 50%;height: 40px;float:right;" class="form-control" type="text">
+                    </form>
+
                     <div style="margin-top: 100px" class="content table-responsive table-full-width table-wrapper-scroll-y">
                         <table class="table display table table-bordered table-striped">
                             <thead>
@@ -23,7 +29,7 @@
                                     <th>Opciones</th>
                                 </tr>
                             </thead>
-                            <tbody *ngFor="let product of products">
+                            <tbody *ngFor="let product of displayData">
                                 <tr>
                                     <td>{{product.productName}}</td>
                                     <td>{{product.description}}</td>
