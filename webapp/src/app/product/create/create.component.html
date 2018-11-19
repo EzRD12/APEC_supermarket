@@ -1,14 +1,14 @@
 <div id="contact-page" class="container">
     <div class="bg">
-        <div class="row">    		
-            <div class="col-sm-12">    			   			
-                <h2 class="title text-center">Productos</h2>    			    				    				
-            </div>			 		
-        </div>    	
-        <div class="row">  	
+        <div class="row">
+            <div class="col-sm-12">
+                <h2 class="headers text-center">Productos</h2>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-sm-12">
                 <div class="contact-form">
-                    <h2 class="title text-center">Creacion de un producto</h2>
+                    <h2 class="headers text-center">Creacion de un producto</h2>
                     <div class="status alert alert-success" style="display: none"></div>
                     <form  class="contact-form row" (ngSubmit)="create()" [formGroup]="addProductForm" name="contact-form" method="POST" action="/Process">
                         <div class="form-group col-md-6">
@@ -33,14 +33,14 @@
                         </div>
                         <div class="form-group col-md-12">
                             <textarea name="description" formControlName="description" id="description" class="form-control" rows="8" placeholder="Descripcion del producto"></textarea>
-                        </div>                        
+                        </div>
                             <input type="submit" name="submit" class="btn btn-primary pull-right" value="Submit">
                     </form>
                 </div>
             </div>
             <div class="col-sm-4">
 
-            </div>    			
-        </div>  
-    </div>	
+            </div>
+        </div>
+    </div>
 </div><!--/#contact-page-->

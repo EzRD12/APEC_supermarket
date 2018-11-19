@@ -1,20 +1,24 @@
 <header id="header" style="margin-left:2em; padding:1.2em;"><!--header-->
-    <img src="../assets/images/logo.png" width="70px" style="float:left; "/>
-      
+    <img src="../assets/images/logo.png" width="150px" style="float:left; "/>
+
     <div class="container">
         <div class="row">
             <div class="col-sm-9">
                 <div class="mainmenu pull-left">
                     <ul class="nav navbar-nav collapse navbar-collapse" style="margin-left:1.5em; margin-top:1.5em;">
-                        <li><a [routerLink]="['/index']" class="active">Inicio</a></li>
-                        <li class="dropdown"><a >Productos<i class="fa fa-angle-down"></i></a>
-                            <ul role="menu" class="sub-menu">
-                                <li><a [routerLink]="['/entry']">Entrada</a></li> 
-                                <li><a [routerLink]="['/output']">Salida</a></li> 
-                            </ul>
-                        </li> 
+                        <li><a [routerLink]="['/index']">Inicio</a></li>
                         <li><a [routerLink]="['/transfers']">Transacciones</a></li>
-                        <li><a href="#">Contactos</a></li>
+                        <li class="dropdown">
+                          <a class="dropdown-toggle" data-toggle="dropdown">
+                              Productos
+                              <span class="caret"></span>
+                          </a>
+                          <ul  class="dropdown-menu dropdmenu">
+                            <li><a [routerLink]="['/entry']"> Entrada</a></li>
+                            <li><a [routerLink]="['/output']">Salida</a></li>
+                          </ul>
+                      </li>
+                        <!-- <li><a href="#">Contactos</a></li> -->
                     </ul>
                 </div>
             </div>
@@ -30,7 +34,10 @@ background-color: #ef5734;" ></div>
     <router-outlet></router-outlet>
 </section>
 
-<footer id="footer"><!--Footer-->
+<footer>
+  © 2018, V-Inventory - Todos los derechos reservados -
+</footer>
+<!-- <footer id="footer">
     <div class="footer-widget">
         <div class="container">
             <div class="row">
@@ -78,7 +85,7 @@ background-color: #ef5734;" ></div>
 
             </div>
         </div>
-    </div>	
-</footer><!--/Footer-->
-
+    </div>
+</footer>
+ -->
 
