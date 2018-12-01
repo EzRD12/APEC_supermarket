@@ -6,6 +6,7 @@
             <div class="col-sm-9">
                 <div class="mainmenu pull-left">
                     <ul class="nav navbar-nav collapse navbar-collapse" style="margin-left:1.5em; margin-top:1.5em;">
+                      <li><a [routerLink]="['/dashboard']"> dashboard</a></li>
                         <li><a [routerLink]="['/index']">Inicio</a></li>
                         <li><a [routerLink]="['/transfers']">Transacciones</a></li>
                         <li class="dropdown">
@@ -19,6 +20,15 @@
                           </ul>
                       </li>
                         <!-- <li><a href="#">Contactos</a></li> -->
+                      <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown">
+                          {{username}}
+                          <span class="caret"></span>
+                        </a>
+                        <ul  class="dropdown-menu dropdmenu">
+                          <li><a [routerLink]="['/account/login']"> logout</a></li>
+                        </ul>
+                      </li>
                     </ul>
                 </div>
             </div>

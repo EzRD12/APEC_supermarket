@@ -11,12 +11,16 @@ import { ProductModule } from './product/product.module';
 import { ProductService } from './services/product.service';
 import { TransferModule } from './transfer/transfer.module';
 import { TransferService } from './services/transfer.service';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { AuthLayoutComponent } from './auth-layout/auth-layout.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    LayoutComponent
+    LayoutComponent,
+    DashboardComponent,
+    AuthLayoutComponent
   ],
   imports: [
     BrowserModule,

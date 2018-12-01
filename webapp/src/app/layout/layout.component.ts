@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-layout',
@@ -6,10 +6,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./layout.component.css']
 })
 export class LayoutComponent implements OnInit {
+  username = '';
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    this.username = user.username || '';
   }
 
 }
